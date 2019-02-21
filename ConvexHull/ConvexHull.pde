@@ -1,14 +1,14 @@
+int WIDTH = 800;
+int HEIGHT = 600;
 
-Polygon p = new Polygon();
+RandomPointset pointset = new RandomPointset();
+Polygon p = new Polygon(pointset.points);
+
 void setup() {
-  size(800, 600);
+  size(800, 600); // WIDTH x HEIGHT. Processing does not allow consts D:
   pixelDensity(2); // Retina screen
-  p.addPoint(new Point(80, 30));
-  p.addPoint(new Point(70, 160));
-  p.addPoint(new Point(200, 370));
-  p.addPoint(new Point(400, 500));
+  
 }
-
 
 
 void draw() {
