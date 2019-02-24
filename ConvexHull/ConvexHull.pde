@@ -1,5 +1,5 @@
-int WIDTH = 800;
-int HEIGHT = 600;
+int WINDOW_WIDTH = 800;
+int WINDOW_HEIGHT = 600;
 
 RandomPointSetRectangle pointset = new RandomPointSetRectangle();
 Pseudogon p = new Pseudogon(pointset.points);

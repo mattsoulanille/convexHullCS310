@@ -5,8 +5,8 @@ public class RandomPointSetRectangle {
   public RandomPointSetRectangle(int count, double w, double h, Point topLeft) { 
     // Constructor: fills with randomly-sampled points
     // count: number of points
-    // w: width of rectangle
-    // h: height of rectangle
+    // w: WINDOW_WIDTH of rectangle
+    // h: WINDOW_HEIGHT of rectangle
     // topLeft: top left point of rectangle
     points = new ArrayList<Point>();
     for (int i = 0; i < count; i++) {
@@ -17,12 +17,12 @@ public class RandomPointSetRectangle {
   
   public RandomPointSetRectangle(int count, double w, double h) { 
     // Constructor with default top left point
-    this(count, w, h, new Point(width / 4, height / 4)); //width and height are of the screen, w and h are of the rectangle
+    this(count, w, h, new Point(WINDOW_WIDTH / 4, WINDOW_HEIGHT / 4)); //WINDOW_WIDTH and WINDOW_HEIGHT are of the screen, w and h are of the rectangle
   }
   
   public RandomPointSetRectangle(int count) { 
     // Constructor with default rectangle size
-    this(count, width/2, height/2);
+    this(count, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
   }
   
   public RandomPointSetRectangle() { 
@@ -54,7 +54,7 @@ public class RandomPointSetCircle {
   }
   public RandomPointSetCircle(int count, double radius, double offset) {
     // Constructor which automatically uses origin as center of screen
-    this(count, radius, offset, new Point(width / 2, height / 2));
+    this(count, radius, offset, new Point(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2));
   }
   public RandomPointSetCircle(int count, double radius) {
     // Constructor which automatically uses origin as center of screen
@@ -63,7 +63,7 @@ public class RandomPointSetCircle {
   }
   public RandomPointSetCircle(int count) {
     // Constructor which also automatically sets the radius
-    this(count, Math.min(width, height) * 1.8/4.0);
+    this(count, Math.min(WINDOW_WIDTH, WINDOW_HEIGHT) * 1.8/4.0);
   }
   public RandomPointSetCircle() {
     // 100 points
