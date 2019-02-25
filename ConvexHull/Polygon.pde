@@ -1,20 +1,15 @@
-class Pseudogon {
+class Pseudogon extends PointList{
   
   // For storing and drawing "polygons"
   // Stores a list of points
   // Draws lines between them as if it's a polygon
   // No guarantees that it's actually a polygon
   
-  private ArrayList<Point> points;
   public Pseudogon() { // Constructs an empty Pseudogon
-    points = new ArrayList<Point>(); 
+    super(); 
   }
-  public Pseudogon(ArrayList<Point> points) { // Constructs a Pseudogon from a given list of points
-    // precondition: this list is a valid Pseudogon
-    this.points = points;  
-  }
-  public void addPoint(Point p) { // Appends a point
-    points.add(p); 
+  public Pseudogon(List<Point> newpoints) { // Constructs a Pseudogon from a given list of points
+    super(newpoints); 
   }
   public void draw() { // Draws the Pseudogon
     Point previous = points.get(points.size() - 1);
