@@ -15,6 +15,7 @@ class Pseudogon extends PointList{
   }
   public void draw() { // Draws the Pseudogon
     stroke(204, 102, 0);
+    fill(204, 102, 0);
     Point previous = points.get(points.size() - 1);
     for (Point p: points) {
       p.draw(); // Draw the point

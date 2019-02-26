@@ -5,7 +5,7 @@ class Point {
   public double x;
   public double y;  
   public Point(double x, double y) {
-    scale = 2; // Statics are not allowed for whatever reason
+    scale = 10; // Statics are not allowed for whatever reason
     this.x = x;
     this.y = y;
   }
