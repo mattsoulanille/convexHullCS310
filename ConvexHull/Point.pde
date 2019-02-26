@@ -1,3 +1,5 @@
+// Daniel Fesbach, Matthew Soulanille
+
 class Point {
   private float scale;
   public double x;

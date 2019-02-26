@@ -1,3 +1,5 @@
+// Daniel Fesbach, Matthew Soulanille
+
 class Pseudogon extends PointList{
   
   // For storing and drawing "polygons"

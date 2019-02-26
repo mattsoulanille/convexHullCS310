@@ -1,3 +1,5 @@
+// Daniel Fesbach, Matthew Soulanille
+
 import java.util.Comparator;
 
 public class ComparatorCCW implements Comparator<Point>{

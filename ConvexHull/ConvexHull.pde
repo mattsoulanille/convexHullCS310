@@ -1,3 +1,5 @@
+// Daniel Fesbach, Matthew Soulanille
+
 import java.util.Stack;
 
 int WINDOW_WIDTH = 800;
@@ -7,8 +9,8 @@ PointList PointList = new RandomPointListCircle(100);
 
 int startTime = millis();
 //Pseudogon p = (Pseudogon)points;
-Pseudogon p = NaiveConvexHull(PointList);
-//Pseudogon p = GrahamScan(PointList);
+//Pseudogon p = NaiveConvexHull(PointList);
+Pseudogon p = GrahamScan(PointList);
 int endTime = millis();
 
 
