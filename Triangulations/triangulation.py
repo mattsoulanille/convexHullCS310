@@ -39,13 +39,13 @@ class Triangulation:
 
     #generates all the rotations of this triangulation,
     #   filtering out ones (other than 0) which also have edge (i, j)
-    def filtered_rotations(self, i, j):
+    def filtered_rotations(self, x, y):
         assert((i,j) in self) #otherwise this doesn't make any sense
         yield self
         rot = copy.deepcopy(self) #copy to be rotated
         rot.rotate()
         for i in range(1, self.n):
-            if !((i,j) in rot):
+            if !((x,y) in rot):
                 yield rot
             rot.rotate()
         assert (rot.rotation == self.rotation) # sanity check
