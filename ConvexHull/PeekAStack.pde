@@ -1,3 +1,5 @@
+// Daniel Fesbach, Matthew Soulanille
+
 import java.util.LinkedList;
 
 public class PikaStack<T> {

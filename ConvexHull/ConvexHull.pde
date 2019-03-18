@@ -1,9 +1,11 @@
+// Daniel Fesbach, Matthew Soulanille
+
 import java.util.Stack;
 
 int WINDOW_WIDTH = 800;
 int WINDOW_HEIGHT = 600;
 
-PointList PointList = new RandomPointListCircle(100);
+PointList PointList = new RandomPointListRectangle(20);
 
 int startTime = millis();
 //Pseudogon p = (Pseudogon)points;
@@ -13,6 +15,8 @@ int endTime = millis();
 
 
 void setup() {
+  background(255, 255, 255);
+  fill(0, 0, 0);
   size(800, 600); // WIDTH x HEIGHT. Processing does not allow consts D:
   pixelDensity(2); // Retina screen
   print(endTime-startTime);

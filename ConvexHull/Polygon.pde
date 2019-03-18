@@ -1,3 +1,5 @@
+// Daniel Fesbach, Matthew Soulanille
+
 class Pseudogon extends PointList{
   
   // For storing and drawing "polygons"
@@ -12,6 +14,8 @@ class Pseudogon extends PointList{
     super(newpoints); 
   }
   public void draw() { // Draws the Pseudogon
+    stroke(204, 102, 0);
+    fill(204, 102, 0);
     Point previous = points.get(points.size() - 1);
     for (Point p: points) {
       p.draw(); // Draw the point
