@@ -5,26 +5,31 @@ import java.util.Stack;
 int WINDOW_WIDTH = 800;
 int WINDOW_HEIGHT = 600;
 
-PointList PointList = new RandomPointListRectangle(20);
+//PointList pointList = new RandomPointListCircle(10);
+PointList pointList = new PointList();
 
-int startTime = millis();
-//Pseudogon p = (Pseudogon)points;
-Pseudogon p = NaiveConvexHull(PointList);
-//Pseudogon p = GrahamScan(PointList);
-int endTime = millis();
+Pseudogon p;
 
 
 void setup() {
+  //TimingData();
+  pointList.addPoint(new Point(400, 300)); // A triangle with a colinear point
+  pointList.addPoint(new Point(400, 200)); // and a degenerate double point
+  pointList.addPoint(new Point(400, 400));
+  pointList.addPoint(new Point(600, 300));
+  pointList.addPoint(new Point(600, 300));
+  p = GrahamScan(pointList);
+  //p = NaiveConvexHull(pointList);
+  
   background(255, 255, 255);
   fill(0, 0, 0);
   size(800, 600); // WIDTH x HEIGHT. Processing does not allow consts D:
   pixelDensity(2); // Retina screen
-  print(endTime-startTime);
   noLoop();
 }
 
 void draw() {
-  PointList.draw();
+  pointList.draw();
   p.draw();
 }
 
@@ -34,9 +39,8 @@ Pseudogon GrahamScan(PointList points){
   /* This isn't a polygon, but we need to rule this out 
      so we can later index into the first 3 positions */
   if(points.count() < 3){
-    return (Pseudogon)points; 
+    return new Pseudogon(points.points); 
   }
-  
   // Find a lowest point
   Point low = points.lowestPoint();
   // Angularly sort the other points counterclockwise to low
@@ -71,6 +75,10 @@ Pseudogon NaiveConvexHull(PointList pointset){
   /* Checks all point pairs for whether all other points 
      are on the same side of the line */
   List<Point> points = pointset.points;
+  if (points.size() <= 3) {
+     return new Pseudogon(points);
+  }
+  
   HashMap<Point, Point> segments = new HashMap();
   
   // For each distinct, directed pairs of points (p1, p2)
@@ -112,4 +120,18 @@ Pseudogon NaiveConvexHull(PointList pointset){
     next = segments.get(next); //the point after next
   }
   return poly;  
+}
+
+
+void TimingData() {
+    int[] sizes = {1000, 10000, 100000, 1000000};
+     //int[] sizes = {1000000, 10000, 100000, 1000000};
+    for (int i = 0; i < 4; i++) {
+       int size = sizes[i];
+       PointList PointList = new RandomPointListCircle(size);
+       int startTime = millis();
+       Pseudogon p = NaiveConvexHull(PointList);
+       int endTime = millis();
+       print(size + " took " + (endTime - startTime) + "\n");
+    }
 }

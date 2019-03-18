@@ -17,7 +17,10 @@ class Triangulation:
         if (self.adjacency[i][j] == 0):
             self.adjacency[i][j] = 1
             self.adjacency[j][i] = 1
-            self.diagonals.append((min(i,j),max(i,j))
+            self.diagonals.append((min(i,j),max(i,j)))
 
-    def __contains__(self, i, j):
-        return self.adjacency[i][j] == 1
+    def __contains__(self, t):
+        return self.adjacency[t[0]][t[1]] == 1
+
+
+
