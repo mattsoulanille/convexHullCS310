@@ -43,29 +43,18 @@ class Triangulation:
             (i, j) = ( (d[0]+self.rotation)%self.n,
                        (d[1]+self.rotation)%self.n )
             result.append( (min(i, j), max(i, j)) )
-
         return result
+
+    def normalize_labels(self):
+        #adjust the adjacency matrix so the rotation can be 0
+        self.adjacency = numpy.roll(self.adjacency, -self.rotation, [0,1])
+        self.rotation = 0
+
+    def add_vertex(self):
+        self.normalize_labels() #necessary to ensure the new vertex is at the end
+        # add a row and column of zeroes on the ends
+        self.adjacency = numpy.pad(self.adjacency, (0,1), 'constant', constant_values=(0))
+        self.dimension += 1
 
     def __str__(self):
         return str(self.true_diagonals())
-
-def all_rotations(tri:Triangulation, x:int, y:int):
-    r = copy(tri) #copy to be rotated
-    n = tri.n
-    for i in range(n):
-        yield (copy(r), ((x+i)%n, (y+i)%n))
-        r.rotate()
-
-def integrated_filter(rotations, to_exclude=[]):
-    (t, d) = next(rotations) #d is the canonical diagonal
-    keep = True
-    i = 0
-    while (keep and i<len(to_exclude)):
-        keep &= (to_exclude[i] not in t)
-        i += 1
-    if keep:
-        yield t
-    yield from integrated_filter(rotations, to_exclude+[d])
-
-def rots_we_want(tri:Triangulation, x:int, y:int):
-    yield from integrated_filter(all_rotations(tri, x, y))

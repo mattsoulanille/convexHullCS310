@@ -1,4 +1,5 @@
 from triangulation import *
+from generators import *
 
 t = Triangulation(5);
 t.add_diagonal(1,3)
