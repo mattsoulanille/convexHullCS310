@@ -31,6 +31,7 @@ class Triangulation:
 
     def __contains__(self, t):
         (i, j) = self.raw_inds(t[0], t[1])
+        assert(self.adjacency[i][j] == self.adjacency[j][i])
         return self.adjacency[i][j] == 1
 
     def rotate(self, k=1): #rotate the indices
@@ -49,12 +50,36 @@ class Triangulation:
         return str(self.true_diagonals())
 
 #generates all the rotations of this triangulation
-def all_rotations(tri:Triangulation):
+def tr_orbit(tri:Triangulation):
     r = copy(tri) #copy to be rotated
     for i in range(0, tri.n):
         yield copy(r)
         r.rotate()
     assert (r.rotation == tri.rotation) # sanity check
+
+#generates all the rotations of this diagonal
+def diag_orbit(x:int, y:int, n:int):
+    for i in range(n):
+        print (i)
+        yield ((x+i)%n, (y+i)%n)
+
+def all_rotations(tri:Triangulation, x:int, y:int):
+    r = copy(tri) #copy to be rotated
+    n = tri.n
+    for i in range(n):
+        yield (copy(r), ((x+i)%n, (y+i)%n))
+        r.rotate()
+
+def integrated_filter(rotations, to_exclude=[]):
+    (t, d) = next(rotations) #d is the canonical diagonal
+    keep = True
+    i = 0
+    while (keep and i<len(to_exclude)):
+        keep &= (to_exclude[i] not in t)
+        i += 1
+    if keep:
+        yield t
+    yield from integrated_filter(rotations, to_exclude+[d])
 
 #removes generated triangulations with edge (x,y)
 def filter_out(g, x:int, y:int):
@@ -72,15 +97,16 @@ def filter_except_first(g, x:int, y:int):
     yield next(g)
     yield from filter_out(g, x, y)
 
-def rotations_of_diag(x:int, y:int, n:int):
-    for i in range(n):
-        yield ((x+i)%n, (y+i)%n)
 
-def cascade_filter(rotations, diagonals):
+
+def cascade_filter(rotations, orbit):
     filtered = rotations
-    for diag in diagonals:
+    for diag in orbit:
+        #pdb.set_trace()
+        print(diag)
         yield next(filtered)
         filtered = filter_out(filtered, diag[0], diag[1])
 
+
 def rots_we_want(tri:Triangulation, x:int, y:int):
-    yield from cascade_filter(all_rotations(tri), rotations_of_diag(x, y, tri.n))
+    yield from cascade_filter(all_rotations(tri), diag_orbit(x, y, tri.n))
