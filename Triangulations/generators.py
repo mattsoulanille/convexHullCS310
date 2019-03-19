@@ -1,3 +1,6 @@
+from triangulation import *
+
+
 def all_rotations(tri:Triangulation, x:int, y:int):
     r = copy(tri) #copy to be rotated
     n = tri.n

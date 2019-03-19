@@ -1,4 +1,3 @@
-from triangulation import *
 from generators import *
 
 t = Triangulation(5);
