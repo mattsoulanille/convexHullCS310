@@ -1,8 +1,17 @@
 from generators import *
 
-t = Triangulation(5);
-t.add_diagonal(1,3)
-t.add_diagonal(1,4)
-#print(t)
-for x in rots_we_want(t, 1, 3):
-    print(x)
+
+def gen_quad():
+    t = Triangulation(4);
+    t.add_diagonal(0,2)
+    yield deepcopy(t)
+    t.rotate()
+    yield deepcopy(t)
+
+
+count=0
+for x in gen_triangulations(7):
+    count += 1
+    #print(x)
+
+print(count)

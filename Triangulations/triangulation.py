@@ -1,5 +1,4 @@
 import numpy
-from copy import copy
 import pdb
 
 class Triangulation:
@@ -46,6 +45,7 @@ class Triangulation:
         return result
 
     def normalize_labels(self):
+        self.diagonals = self.true_diagonals()
         #adjust the adjacency matrix so the rotation can be 0
         self.adjacency = numpy.roll(self.adjacency, -self.rotation, [0,1])
         self.rotation = 0
@@ -54,7 +54,10 @@ class Triangulation:
         self.normalize_labels() #necessary to ensure the new vertex is at the end
         # add a row and column of zeroes on the ends
         self.adjacency = numpy.pad(self.adjacency, (0,1), 'constant', constant_values=(0))
-        self.dimension += 1
+        self.n += 1
 
     def __str__(self):
         return str(self.true_diagonals())
+
+    def __repr__(self):
+        return (self.adjacency, self.diagonals, self.rotation)
