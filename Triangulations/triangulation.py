@@ -23,8 +23,11 @@ class Triangulation:
             self.adjacency[j][i] = 1
             self.diagonals.append((min(i,j),max(i,j)))
 
-    def raw_inds(self, i, j): #adjusts for rotation
-        return ((i - self.rotation) % self.n, (j - self.rotation) % self.n)
+    def raw_inds(self, x, y): #adjusts for rotation
+        return ((x - self.rotation) % self.n, (y - self.rotation) % self.n)
+
+    def rot_inds(self, i, j): #takes raw indices and gives rotated indices
+        return ((i + self.rotation) % self.n, (j + self.rotation) % self.n)
 
     def __contains__(self, t):
         (i, j) = self.raw_inds(t[0], t[1])
@@ -34,29 +37,50 @@ class Triangulation:
         self.rotation = (self.rotation + k) % self.n
 
     def true_diagonals(self): #adjusted for rotation
-
         result = []
         for d in self.diagonals:
             (i, j) = ( (d[0]+self.rotation)%self.n,
                        (d[1]+self.rotation)%self.n )
             result.append( (min(i, j), max(i, j)) )
-                           
+
         return result
 
-    #generates all the rotations of this triangulation,
-    #   filtering out ones (other than 0) which also have edge (i, j)
-    def filtered_rotations(self, x, y):
-        assert((x,y) in self) #otherwise this doesn't make any sense
-        rot = copy(self) #copy to be rotated
-        yield copy(rot)
-        rot.rotate()
-        for i in range(1, self.n):
-            if (x,y) not in rot:
-                pdb.set_trace()
-                yield copy(rot)
-            rot.rotate()
-        assert (rot.rotation == self.rotation) # sanity check
-
-
     def __str__(self):
-        print(self.true_diagonals())
+        return str(self.true_diagonals())
+
+#generates all the rotations of this triangulation
+def all_rotations(tri:Triangulation):
+    r = copy(tri) #copy to be rotated
+    for i in range(0, tri.n):
+        yield copy(r)
+        r.rotate()
+    assert (r.rotation == tri.rotation) # sanity check
+
+#removes generated triangulations with edge (x,y)
+def filter_out(g, x:int, y:int):
+    for t in g:
+        if not (x,y) in t:
+            yield t
+
+def filter_out_all(g, to_exclude):
+    filtered = g
+    for diag in to_exclude:
+        filtered = filter_out(filtered, diag[0], diag[1])
+    yield from filtered
+
+def filter_except_first(g, x:int, y:int):
+    yield next(g)
+    yield from filter_out(g, x, y)
+
+def rotations_of_diag(x:int, y:int, n:int):
+    for i in range(n):
+        yield ((x+i)%n, (y+i)%n)
+
+def cascade_filter(rotations, diagonals):
+    filtered = rotations
+    for diag in diagonals:
+        yield next(filtered)
+        filtered = filter_out(filtered, diag[0], diag[1])
+
+def rots_we_want(tri:Triangulation, x:int, y:int):
+    yield from cascade_filter(all_rotations(tri), rotations_of_diag(x, y, tri.n))
