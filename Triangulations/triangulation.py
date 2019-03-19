@@ -6,12 +6,11 @@ class Triangulation:
     # Stores a triangulation of an n-gon as a list of diagonals
     # AND as an adjacency matrix of vertices
 
-    def __init__(self, dimension, max_dimension=dimension):
-        assert(dimension >= 3 and max_dimension >= dimension) #This is a polygon
+    def __init__(self, dimension):
+        assert(dimension >= 3) #This is a polygon
         self.n = dimension
-        self.m = max_dimension
         #adjacency matrix of diagonals, initialized with 0 everywhere:
-        self.adjacency = numpy.zeros([max_dimension, max_dimension])
+        self.adjacency = numpy.zeros([self.n, self.n])
         self.diagonals = [] #list of diagonals as tuples (low-to-high index)
         self.rotation = 0 #how far the indices are rotated (offset)
 
@@ -23,13 +22,6 @@ class Triangulation:
             self.adjacency[i][j] = 1
             self.adjacency[j][i] = 1
             self.diagonals.append((min(i,j),max(i,j)))
-    
-    def resize(self, new_dimension):
-        assert(0 <= new_dimension and new_dimension <= self.m)
-        self.n = new_dimension
-
-    def get_size(self):
-        return self.n
 
     def raw_inds(self, x, y): #adjusts for rotation
         return ((x - self.rotation) % self.n, (y - self.rotation) % self.n)
@@ -77,22 +69,3 @@ def integrated_filter(rotations, to_exclude=[]):
 
 def rots_we_want(tri:Triangulation, x:int, y:int):
     yield from integrated_filter(all_rotations(tri, x, y))
-
-
-# takes a generator of triangulations of n-1 vertices
-# returns a generator of triangulations of n vertices
-def gen_triangulations(g):
-    for t in g:
-        t.resize(t.get_size() + 1)
-        
-        # The new vertex's position is dependent on the triangulation's rotation due to data structure constraints
-
-        (x, y) = (, t.get_size - 2) 
-        t.add_diagonal(x, y) # Cut off the ear that includes the new vertex
-        yield from rots_we_want(t, x, y)
-
-
-def get_triangulations(n):
-
-            
-    
