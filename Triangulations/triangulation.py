@@ -49,20 +49,6 @@ class Triangulation:
     def __str__(self):
         return str(self.true_diagonals())
 
-#generates all the rotations of this triangulation
-def tr_orbit(tri:Triangulation):
-    r = copy(tri) #copy to be rotated
-    for i in range(0, tri.n):
-        yield copy(r)
-        r.rotate()
-    assert (r.rotation == tri.rotation) # sanity check
-
-#generates all the rotations of this diagonal
-def diag_orbit(x:int, y:int, n:int):
-    for i in range(n):
-        print (i)
-        yield ((x+i)%n, (y+i)%n)
-
 def all_rotations(tri:Triangulation, x:int, y:int):
     r = copy(tri) #copy to be rotated
     n = tri.n
@@ -81,32 +67,5 @@ def integrated_filter(rotations, to_exclude=[]):
         yield t
     yield from integrated_filter(rotations, to_exclude+[d])
 
-#removes generated triangulations with edge (x,y)
-def filter_out(g, x:int, y:int):
-    for t in g:
-        if not (x,y) in t:
-            yield t
-
-def filter_out_all(g, to_exclude):
-    filtered = g
-    for diag in to_exclude:
-        filtered = filter_out(filtered, diag[0], diag[1])
-    yield from filtered
-
-def filter_except_first(g, x:int, y:int):
-    yield next(g)
-    yield from filter_out(g, x, y)
-
-
-
-def cascade_filter(rotations, orbit):
-    filtered = rotations
-    for diag in orbit:
-        #pdb.set_trace()
-        print(diag)
-        yield next(filtered)
-        filtered = filter_out(filtered, diag[0], diag[1])
-
-
 def rots_we_want(tri:Triangulation, x:int, y:int):
-    yield from cascade_filter(all_rotations(tri), diag_orbit(x, y, tri.n))
+    yield from integrated_filter(all_rotations(tri, x, y))
