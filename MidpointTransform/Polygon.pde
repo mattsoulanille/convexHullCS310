@@ -14,6 +14,9 @@ class Pseudogon extends PointList{
     super(newpoints); 
   }
   public void draw() { // Draws the Pseudogon
+    if (points.size() == 0) {
+       return; 
+    }
     stroke(204, 102, 0);
     fill(204, 102, 0);
     Point previous = points.get(points.size() - 1);
@@ -30,13 +33,65 @@ class Pseudogon extends PointList{
      // Right now, it just randomly nudges them by a bit.
      
      List<Point> newPoints = new ArrayList<Point>();
-     for (Point p : points) {
-       double factor = 10;
-       double dx = (Math.random() - 0.5) * factor;
-       double dy = (Math.random() - 0.5) * factor;
-       Point newPoint = new Point(p.x + dx, p.y + dy);
-       newPoints.add(newPoint);
+     int size = points.size();
+     for (int index = 0; index < size; index ++) {
+       Point current = points.get(index);
+       Point next = points.get((index + 1) % size);
+       Point midpoint = new Point((current.x + next.x) / 2.0,
+                                  (current.y + next.y) / 2.0);
+       
+       newPoints.add(midpoint);
      }
      points = newPoints;
+  }
+  
+  public void midpointTransformConservative() {
+     double beforePerimeter = getPerimeter();
+     midpointTransform();
+     double afterPerimeter = getPerimeter();
+     double scaleBy = beforePerimeter / afterPerimeter;
+     scaleTo(scaleBy);
+  }
+  
+  public Point getCenter() {
+    Point sum = new Point(0, 0);
+    if (points.size() == 0) {
+      return sum;  
+    }
+    
+    for (Point p : points) {
+      sum.x += p.x;
+      sum.y += p.y;
+    }//divide by num of pts, beware 0-gon
+    
+    sum.x /= points.size();
+    sum.y /= points.size();
+    return sum;
+  }
+  
+  public double getPerimeter() {
+    if (points.size() == 0) {
+     return 0; 
+    }
+    
+    double perimeter = 0;
+    
+    int size = points.size();
+     for (int index = 0; index < size; index ++) {
+       Point current = points.get(index);
+       Point next = points.get((index + 1) % size);
+       perimeter += current.distance(next);
+     }
+     
+    return perimeter;
+  }
+  
+  public void scaleTo(double proportion) {
+    Point center = getCenter();
+    for (Point p: points) {
+       p.subtract(center);
+       p.scale(proportion);
+       p.add(center);
+    }
   }
 }

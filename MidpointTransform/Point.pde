@@ -53,4 +53,23 @@ class Point {
      return Math.pow(other.x-x, 2) + Math.pow(other.y-y, 2);
   }
   
+  public double distance(Point other) {
+   return Math.sqrt(distanceSquared(other)); 
+  }
+  
+  public void add(Point other) {
+    x += other.x;
+    y += other.y;
+  }
+  
+  public void subtract(Point other) {
+    x -= other.x;
+    y -= other.y;
+  }
+  
+  public void scale(double val) {
+   x *= val;
+   y *= val;
+  }
+  
 }
